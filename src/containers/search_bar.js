@@ -1,12 +1,16 @@
 import React, { Component } from "react"
+import { connect } from "react-redux"
+import { bindActionCreators } from "redux"
+import { fetchWeather } from "../actions/index"
 
-export default class SearchBar extends Component {
+class SearchBar extends Component {
   constructor(props) {
     super(props)
 
     this.state = {term: ""}
 
     this.onInputChange = this.onInputChange.bind(this)
+    this.onFormSubmit = this.onFormSubmit.bind(this)
   } //constructor
 
   onInputChange(event) {
@@ -17,8 +21,8 @@ export default class SearchBar extends Component {
   onFormSubmit(event) {
     event.preventDefault()
     // Get weather from API
-    
-
+    this.props.fetchWeather(this.state.term)
+    this.setState({ term: "" })
   } //onFormSubmit so that enter and pushing submit don't submit form
 
   render() {
@@ -37,3 +41,9 @@ export default class SearchBar extends Component {
     ) //return use form so that enter and click Submit use same eventhandler
   } //render
 } //SearchBar
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ fetchWeather }, dispatch)
+} // gives access to this.props.fetchWeather
+
+export default connect(null, mapDispatchToProps)(SearchBar)
